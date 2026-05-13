@@ -1,0 +1,72 @@
+cubes:
+  - name: brand
+    sql_table: monolis_staging.`Brand`
+    data_source: default
+
+    joins:
+      - name: buyer
+        sql: "{CUBE}.`buyerId` = {buyer.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: address
+        sql: "{CUBE}.`address`"
+        type: string
+
+      - name: bank_account
+        sql: "{CUBE}.`bankAccount`"
+        type: string
+
+      - name: bank_name
+        sql: "{CUBE}.`bankName`"
+        type: string
+
+      - name: beneficiary
+        sql: "{CUBE}.`beneficiary`"
+        type: string
+
+      - name: bom_excel_code
+        sql: "{CUBE}.`bomExcelCode`"
+        type: string
+
+      - name: bom_pdf_code
+        sql: "{CUBE}.`bomPdfCode`"
+        type: string
+
+      - name: excel_code
+        sql: "{CUBE}.`excelCode`"
+        type: string
+
+      - name: name
+        sql: "{CUBE}.`name`"
+        type: string
+
+      - name: pdf_code
+        sql: "{CUBE}.`pdfCode`"
+        type: string
+
+      - name: swift_code
+        sql: "{CUBE}.`swiftCode`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

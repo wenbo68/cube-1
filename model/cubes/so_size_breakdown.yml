@@ -1,0 +1,41 @@
+cubes:
+  - name: so_size_breakdown
+    sql_table: monolis_staging.`SOSizeBreakdown`
+    data_source: default
+
+    joins:
+      - name: garment_color_way
+        sql: "{CUBE}.`garmentColorWayId` = {garment_color_way.id}"
+        relationship: many_to_one
+
+      - name: sopo
+        sql: "{CUBE}.`sopoId` = {sopo.id}"
+        relationship: many_to_one
+
+      - name: so_size
+        sql: "{CUBE}.`soSizeId` = {so_size.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+    measures:
+      - name: count
+        sql: "{CUBE}.`count`"
+        type: sum
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

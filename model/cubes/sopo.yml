@@ -1,0 +1,64 @@
+cubes:
+  - name: sopo
+    sql_table: monolis_staging.`SOPO`
+    data_source: default
+
+    joins:
+      - name: sales_order
+        sql: "{CUBE}.`salesOrderId` = {sales_order.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: destination
+        sql: "{CUBE}.`destination`"
+        type: string
+
+      - name: po_no
+        sql: "{CUBE}.`poNo`"
+        type: string
+
+      - name: remark
+        sql: "{CUBE}.`remark`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: content_updated_at
+        sql: "{CUBE}.`contentUpdatedAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+      - name: etd
+        sql: "{CUBE}.`ETD`"
+        type: time
+
+      - name: ex_fac
+        sql: "{CUBE}.`exFac`"
+        type: time
+
+      - name: in_dc
+        sql: "{CUBE}.`inDC`"
+        type: time
+
+      - name: loading_date
+        sql: "{CUBE}.`loadingDate`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

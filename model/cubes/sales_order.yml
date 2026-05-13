@@ -1,0 +1,108 @@
+cubes:
+  - name: sales_order
+    sql_table: monolis_staging.`SalesOrder`
+    data_source: default
+
+    joins:
+      - name: brand
+        sql: "{CUBE}.`brandId` = {brand.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: country_code
+        sql: "{CUBE}.`countryCode`"
+        type: string
+
+      - name: garment_sub_type
+        sql: "{CUBE}.`garmentSubType`"
+        type: string
+
+      - name: order_type
+        sql: "{CUBE}.`orderType`"
+        type: string
+
+      - name: port_code
+        sql: "{CUBE}.`portCode`"
+        type: string
+
+      - name: port_code_suffix
+        sql: "{CUBE}.`portCodeSuffix`"
+        type: string
+
+      - name: remark
+        sql: "{CUBE}.`remark`"
+        type: string
+
+      - name: sales_order_number
+        sql: "{CUBE}.`salesOrderNumber`"
+        type: string
+
+      - name: season
+        sql: "{CUBE}.`season`"
+        type: string
+
+      - name: style_category
+        sql: "{CUBE}.`styleCategory`"
+        type: string
+
+      - name: style_code
+        sql: "{CUBE}.`styleCode`"
+        type: string
+
+      - name: style_description
+        sql: "{CUBE}.`styleDescription`"
+        type: string
+
+      - name: style_number
+        sql: "{CUBE}.`styleNumber`"
+        type: string
+
+      - name: style_type
+        sql: "{CUBE}.`styleType`"
+        type: string
+
+      - name: unit
+        sql: "{CUBE}.`unit`"
+        type: string
+
+      - name: year
+        sql: "{CUBE}.`year`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: content_updated_at
+        sql: "{CUBE}.`contentUpdatedAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+      - name: completed_at
+        sql: "{CUBE}.`completedAt`"
+        type: time
+
+      - name: document_uploaded_at
+        sql: "{CUBE}.`documentUploadedAt`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+      - name: cm_price
+        sql: "{CUBE}.`CMPrice`"
+        type: sum
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

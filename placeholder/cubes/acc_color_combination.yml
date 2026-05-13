@@ -1,0 +1,36 @@
+cubes:
+  - name: acc_color_combination
+    sql_table: monolis_staging.`AccColorCombination`
+    data_source: default
+
+    joins:
+      - name: bom_accessory
+        sql: "{CUBE}.`bomAccessoryId` = {bom_accessory.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: color_name
+        sql: "{CUBE}.`colorName`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

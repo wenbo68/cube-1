@@ -1,0 +1,64 @@
+cubes:
+  - name: fabric_po_consumption
+    sql_table: monolis_staging.`FabricPOConsumption`
+    data_source: default
+
+    joins:
+      - name: fabric_consumption
+        sql: "{CUBE.fabric_consumption_id} = {fabric_consumption.id}"
+        relationship: many_to_one
+
+      - name: purchase_order
+        sql: "{CUBE}.`purchaseOrderId` = {purchase_order.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: fabric_consumption_id
+        sql: "{CUBE}.`fabricConsumptionId`"
+        type: string
+
+      - name: finish
+        sql: "{CUBE}.`finish`"
+        type: string
+
+      - name: remark
+        sql: "{CUBE}.`remark`"
+        type: string
+
+      - name: shipment_remark
+        sql: "{CUBE}.`shipmentRemark`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+      - name: order_quantity
+        sql: "{CUBE}.`orderQuantity`"
+        type: sum
+
+      - name: shipment_unit_price
+        sql: "{CUBE}.`shipmentUnitPrice`"
+        type: sum
+
+      - name: unit_price
+        sql: "{CUBE}.`unitPrice`"
+        type: sum
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

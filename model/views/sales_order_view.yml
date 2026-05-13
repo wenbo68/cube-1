@@ -1,0 +1,31 @@
+views:
+  - name: sales_order_view
+    description: "A flat semantic view for AI to find sales orders with missing or insufficient materials."
+
+    cubes:
+      - join_path: fabric_consumption_balance
+        includes:
+          - need_qty
+          - order_qty
+          - balance_qty
+
+      - join_path: fabric_consumption_balance.sales_order
+        includes:
+          - id
+          - season
+          - year
+          - style_number
+
+      - join_path: fabric_consumption_balance.bom_fabric
+        includes:
+          - fabric_detail
+
+      - join_path: fabric_consumption_balance.sales_order.brand
+        prefix: true
+        includes:
+          - name
+
+      - join_path: fabric_consumption_balance.sales_order.brand.buyer
+        prefix: true
+        includes:
+          - name

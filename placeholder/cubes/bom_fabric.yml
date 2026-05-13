@@ -1,0 +1,60 @@
+cubes:
+  - name: bom_fabric
+    sql_table: monolis_staging.`BOMFabric`
+    data_source: default
+
+    joins:
+      - name: sales_order
+        sql: "{CUBE}.`salesOrderId` = {sales_order.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: brand_item_code
+        sql: "{CUBE}.`brandItemCode`"
+        type: string
+
+      - name: content
+        sql: "{CUBE}.`content`"
+        type: string
+
+      - name: fabric_detail
+        sql: "{CUBE}.`fabricDetail`"
+        type: string
+
+      - name: finish
+        sql: "{CUBE}.`finish`"
+        type: string
+
+      - name: placement
+        sql: "{CUBE}.`placement`"
+        type: string
+
+      - name: supplier_item_code
+        sql: "{CUBE}.`supplierItemCode`"
+        type: string
+
+      - name: unit
+        sql: "{CUBE}.`unit`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

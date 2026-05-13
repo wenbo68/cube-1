@@ -1,0 +1,60 @@
+cubes:
+  - name: acc_consumption
+    sql_table: monolis_staging.`AccConsumption`
+    data_source: default
+
+    joins:
+      - name: acc_color_combination
+        sql: "{CUBE}.`accColorCombinationId` = {acc_color_combination.id}"
+        relationship: many_to_one
+
+      - name: sopo
+        sql: "{CUBE}.`sopoId` = {sopo.id}"
+        relationship: many_to_one
+
+      - name: so_size
+        sql: "{CUBE}.`soSizeId` = {so_size.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: string
+        primary_key: true
+
+      - name: content
+        sql: "{CUBE}.`content`"
+        type: string
+
+      - name: remark
+        sql: "{CUBE}.`remark`"
+        type: string
+
+      - name: size_detail
+        sql: "{CUBE}.`sizeDetail`"
+        type: string
+
+      - name: sub_class
+        sql: "{CUBE}.`subClass`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+      - name: sample_count
+        sql: "{CUBE}.`sampleCount`"
+        type: sum
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

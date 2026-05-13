@@ -1,0 +1,24 @@
+cubes:
+  - name: so_size
+    sql_table: monolis_staging.`SOSize`
+    data_source: default
+
+    joins:
+      - name: sales_order
+        sql: "{CUBE}.`salesOrderId` = {sales_order.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+    measures:
+      - name: count
+        type: count
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+
