@@ -1,0 +1,88 @@
+cubes:
+  - name: purchase_order
+    sql_table: monolis_staging.`PurchaseOrder`
+    data_source: default
+
+    joins:
+      - name: brand
+        sql: "{CUBE}.`brandId` = {brand.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: notify
+        sql: "{CUBE}.`notify`"
+        type: string
+
+      - name: packing_method
+        sql: "{CUBE}.`packingMethod`"
+        type: string
+
+      - name: purchase_order_no
+        sql: "{CUBE}.`purchaseOrderNo`"
+        type: string
+
+      - name: purchase_type
+        sql: "{CUBE}.`purchaseType`"
+        type: string
+
+      - name: remark
+        sql: "{CUBE}.`remark`"
+        type: string
+
+      - name: season
+        sql: "{CUBE}.`season`"
+        type: string
+
+      - name: signature_image
+        sql: "{CUBE}.`signatureImage`"
+        type: string
+
+      - name: type
+        sql: "{CUBE}.`type`"
+        type: string
+
+      - name: year
+        sql: "{CUBE}.`year`"
+        type: string
+
+      - name: created_at
+        sql: "{CUBE}.`createdAt`"
+        type: time
+
+      - name: updated_at
+        sql: "{CUBE}.`updatedAt`"
+        type: time
+
+      - name: completed_at
+        sql: "{CUBE}.`completedAt`"
+        type: time
+
+      - name: from_ex_mill
+        sql: "{CUBE}.`fromExMill`"
+        type: time
+
+      - name: last_shipment_date
+        sql: "{CUBE}.`lastShipmentDate`"
+        type: time
+
+      - name: payment_due_date
+        sql: "{CUBE}.`paymentDueDate`"
+        type: time
+
+      - name: to_ex_mill
+        sql: "{CUBE}.`toExMill`"
+        type: time
+
+    measures:
+      - name: count
+        type: count
+
+    pre_aggregations:
+      # Pre-aggregation definitions go here.
+      # Learn more in the documentation: https://cube.dev/docs/caching/pre-aggregations/getting-started
+

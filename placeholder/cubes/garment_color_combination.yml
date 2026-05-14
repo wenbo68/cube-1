@@ -8,6 +8,10 @@ cubes:
         sql: "{CUBE}.`bomFabricId` = {bom_fabric.id}"
         relationship: many_to_one
 
+      - name: garment_color_way
+        sql: "{CUBE}.`garmentColorWayId` = {garment_color_way.id}"
+        relationship: many_to_one
+
     dimensions:
       - name: id
         sql: "{CUBE}.`id`"

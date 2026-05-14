@@ -1,0 +1,67 @@
+cubes:
+  - name: fabric_consumption_balance
+    sql: >
+      SELECT 
+        fc.id as fabric_consumption_id,
+        bf.salesOrderId as sales_order_id,
+        gcc.bomFabricId as bom_fabric_id,
+        (
+          COALESCE(
+            (SELECT SUM(sb.count)
+             FROM monolis_staging.`SOSizeBreakdown` sb
+             WHERE sb.garmentColorWayId = gcc.garmentColorWayId
+               AND (fc.soSizeId IS NULL OR sb.soSizeId = fc.soSizeId)
+               AND (fc.sopoId IS NULL OR sb.sopoId = fc.sopoId)
+            ), 0
+          ) * COALESCE(fc.yieldPerYard, 0) * (100 + COALESCE(fc.loss, 0)) / 100
+        ) as need_qty,
+        COALESCE(
+          (SELECT SUM(fpo.orderQuantity)
+           FROM monolis_staging.`FabricPOConsumption` fpo
+           WHERE fpo.fabricConsumptionId = fc.id
+          ), 0
+        ) as order_qty
+      FROM monolis_staging.`FabricConsumption` fc
+      JOIN monolis_staging.`GarmentColorCombination` gcc ON fc.gccId = gcc.id
+      JOIN monolis_staging.`BOMFabric` bf ON gcc.bomFabricId = bf.id
+
+    data_source: default
+
+    joins:
+      - name: sales_order
+        sql: "{CUBE}.sales_order_id = {sales_order.id}"
+        relationship: many_to_one
+
+      - name: bom_fabric
+        sql: "{CUBE}.bom_fabric_id = {bom_fabric.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: fabric_consumption_id
+        sql: "{CUBE}.`fabric_consumption_id`"
+        type: string
+        primary_key: true
+
+      - name: sales_order_id
+        sql: "{CUBE}.`sales_order_id`"
+        type: number
+
+      - name: bom_fabric_id
+        sql: "{CUBE}.`bom_fabric_id`"
+        type: number
+
+    measures:
+      - name: count
+        type: count
+
+      - name: need_qty
+        sql: "{CUBE}.`need_qty`"
+        type: sum
+
+      - name: order_qty
+        sql: "{CUBE}.`order_qty`"
+        type: sum
+
+      - name: balance_qty
+        sql: "{CUBE}.order_qty - {CUBE}.need_qty"
+        type: sum

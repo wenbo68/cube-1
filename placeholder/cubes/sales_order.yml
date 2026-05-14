@@ -3,7 +3,10 @@ cubes:
     sql_table: monolis_staging.`SalesOrder`
     data_source: default
 
-    joins: []
+    joins:
+      - name: brand
+        sql: "{CUBE}.`brandId` = {brand.id}"
+        relationship: many_to_one
 
     dimensions:
       - name: id

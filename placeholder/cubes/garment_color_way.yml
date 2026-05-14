@@ -1,19 +1,11 @@
 cubes:
-  - name: so_size_breakdown
-    sql_table: monolis_staging.`SOSizeBreakdown`
+  - name: garment_color_way
+    sql_table: monolis_staging.`GarmentColorWay`
     data_source: default
 
     joins:
-      - name: garment_color_way
-        sql: "{CUBE}.`garmentColorWayId` = {garment_color_way.id}"
-        relationship: many_to_one
-
-      - name: sopo
-        sql: "{CUBE}.`sopoId` = {sopo.id}"
-        relationship: many_to_one
-
-      - name: so_size
-        sql: "{CUBE}.`soSizeId` = {so_size.id}"
+      - name: sales_order
+        sql: "{CUBE}.`salesOrderId` = {sales_order.id}"
         relationship: many_to_one
 
     dimensions:
@@ -21,6 +13,18 @@ cubes:
         sql: "{CUBE}.`id`"
         type: number
         primary_key: true
+
+      - name: color_name
+        sql: "{CUBE}.`colorName`"
+        type: string
+
+      - name: remark
+        sql: "{CUBE}.`remark`"
+        type: string
+
+      - name: sku_color_code
+        sql: "{CUBE}.`skuColorCode`"
+        type: string
 
       - name: created_at
         sql: "{CUBE}.`createdAt`"
@@ -32,8 +36,7 @@ cubes:
 
     measures:
       - name: count
-        sql: "{CUBE}.`count`"
-        type: sum
+        type: count
 
     pre_aggregations:
       # Pre-aggregation definitions go here.

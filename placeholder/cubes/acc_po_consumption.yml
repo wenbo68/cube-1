@@ -8,6 +8,10 @@ cubes:
         sql: "{CUBE.acc_consumption_id} = {acc_consumption.id}"
         relationship: many_to_one
 
+      - name: purchase_order
+        sql: "{CUBE}.`purchaseOrderId` = {purchase_order.id}"
+        relationship: many_to_one
+
     dimensions:
       - name: id
         sql: "{CUBE}.`id`"
