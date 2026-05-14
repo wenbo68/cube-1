@@ -3,16 +3,7 @@ views:
     description: "A flat semantic view for AI to find sales orders with missing or insufficient materials."
 
     cubes:
-      - join_path: fabric_consumption_balance
-        includes:
-          - name: need_qty
-            description: "The total quantity of fabric material needed to produce the garment in the sales order."
-          - name: order_qty
-            description: "The actual quantity of fabric material that has been ordered by the vendor for this sales order."
-          - name: balance_qty
-            description: "The deficit or surplus of fabric material. A negative value (e.g., -50) indicates missing/insufficient fabric that must be procured. A positive value or zero indicates sufficient materials."
-
-      - join_path: fabric_consumption_balance.sales_order
+      - join_path: sales_order
         includes:
           - name: id
             description: "The unique identifier of the sales order."
@@ -23,18 +14,48 @@ views:
           - name: style_number
             description: "The specific style code/number assigned to the garment being produced in the sales order. Sales orders and styles are one-to-one."
 
-      - join_path: fabric_consumption_balance.bom_fabric
+      - join_path: sales_order.fabric_consumption_balance
+        includes:
+          - name: need_qty
+            alias: fabric_need_qty
+            description: "The total quantity of fabric material needed to produce the garment in the sales order."
+          - name: order_qty
+            alias: fabric_order_qty
+            description: "The actual quantity of fabric material that has been ordered by the vendor for this sales order."
+          - name: balance_qty
+            alias: fabric_balance_qty
+            description: "The deficit or surplus of fabric material. A negative value (e.g., -50) indicates missing/insufficient fabric that must be procured. A positive value or zero indicates sufficient materials."
+
+      - join_path: sales_order.trim_consumption_balance
+        includes:
+          - name: need_qty
+            alias: trim_need_qty
+            description: "The total quantity of trim/accessory material needed to produce the garment in the sales order."
+          - name: order_qty
+            alias: trim_order_qty
+            description: "The actual quantity of trim/accessory material that has been ordered by the vendor for this sales order."
+          - name: balance_qty
+            alias: trim_balance_qty
+            description: "The deficit or surplus of trim/accessory material. A negative value indicates missing/insufficient trim that must be procured. A positive value or zero indicates sufficient materials."
+
+      - join_path: sales_order.trim_consumption_balance.bom_accessory
+        includes:
+          - name: acc_detail
+            alias: trim_detail
+            description: "The detailed name or description of the trim/accessory material required for the garment."
+
+      - join_path: sales_order.fabric_consumption_balance.bom_fabric
         includes:
           - name: fabric_detail
             description: "The detailed name or description of the fabric material required for the garment."
 
-      - join_path: fabric_consumption_balance.sales_order.brand
+      - join_path: sales_order.brand
         prefix: true
         includes:
           - name: name
             description: "The brand name associated with the sales order (e.g., 'Vuori')."
 
-      - join_path: fabric_consumption_balance.sales_order.brand.buyer
+      - join_path: sales_order.brand.buyer
         prefix: true
         includes:
           - name: name

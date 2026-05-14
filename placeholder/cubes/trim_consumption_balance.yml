@@ -1,0 +1,68 @@
+cubes:
+  - name: trim_consumption_balance
+    sql: >
+      SELECT 
+        ac.id as acc_consumption_id,
+        ba.salesOrderId as sales_order_id,
+        acc.bomAccessoryId as bom_accessory_id,
+        (
+          COALESCE(
+            (SELECT SUM(sb.count)
+             FROM monolis_staging.`SOSizeBreakdown` sb
+             WHERE sb.garmentColorWayId = acc.garmentColorWayId
+               AND (ac.soSizeId IS NULL OR sb.soSizeId = ac.soSizeId)
+               AND (ac.sopoId IS NULL OR sb.sopoId = ac.sopoId)
+            ), 0
+          ) * COALESCE(ac.yieldPerYard, 0) * (100 + COALESCE(ac.loss, 0)) / 100 / COALESCE(mu.per, 1)
+        ) as need_qty,
+        COALESCE(
+          (SELECT SUM(apo.orderQuantity)
+           FROM monolis_staging.`AccPOConsumption` apo
+           WHERE apo.accConsumptionId = ac.id
+          ), 0
+        ) as order_qty
+      FROM monolis_staging.`AccConsumption` ac
+      JOIN monolis_staging.`AccColorCombination` acc ON ac.accColorCombinationId = acc.id
+      JOIN monolis_staging.`BOMAccessory` ba ON acc.bomAccessoryId = ba.id
+      LEFT JOIN monolis_staging.`MasterUnit` mu ON ba.unitId = mu.id
+
+    data_source: default
+
+    joins:
+      - name: sales_order
+        sql: "{CUBE}.sales_order_id = {sales_order.id}"
+        relationship: many_to_one
+
+      - name: bom_accessory
+        sql: "{CUBE}.bom_accessory_id = {bom_accessory.id}"
+        relationship: many_to_one
+
+    dimensions:
+      - name: acc_consumption_id
+        sql: "{CUBE}.`acc_consumption_id`"
+        type: string
+        primary_key: true
+
+      - name: sales_order_id
+        sql: "{CUBE}.`sales_order_id`"
+        type: number
+
+      - name: bom_accessory_id
+        sql: "{CUBE}.`bom_accessory_id`"
+        type: number
+
+    measures:
+      - name: count
+        type: count
+
+      - name: need_qty
+        sql: "{CUBE}.`need_qty`"
+        type: sum
+
+      - name: order_qty
+        sql: "{CUBE}.`order_qty`"
+        type: sum
+
+      - name: balance_qty
+        sql: "{CUBE}.order_qty - {CUBE}.need_qty"
+        type: sum

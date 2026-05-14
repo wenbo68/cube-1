@@ -8,6 +8,14 @@ cubes:
         sql: "{CUBE}.`brandId` = {brand.id}"
         relationship: many_to_one
 
+      - name: fabric_consumption_balance
+        sql: "{CUBE}.`id` = {fabric_consumption_balance.sales_order_id}"
+        relationship: has_many
+
+      - name: trim_consumption_balance
+        sql: "{CUBE}.`id` = {trim_consumption_balance.sales_order_id}"
+        relationship: has_many
+
     dimensions:
       - name: id
         sql: "{CUBE}.`id`"
