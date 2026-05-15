@@ -1,6 +1,9 @@
 cubes:
   - name: bom_accessory
-    sql_table: monolis_staging.`BOMAccessory`
+    sql: >
+      SELECT ba.*, s.name as supplier_name
+      FROM monolis_staging.`BOMAccessory` ba
+      LEFT JOIN monolis_staging.`Supplier` s ON ba.supplierId = s.id
     data_source: default
 
     joins:
@@ -36,6 +39,14 @@ cubes:
 
       - name: supplier_item_code
         sql: "{CUBE}.`supplierItemCode`"
+        type: string
+
+      - name: supplier_id
+        sql: "{CUBE}.`supplierId`"
+        type: number
+
+      - name: supplier_name
+        sql: "{CUBE}.`supplier_name`"
         type: string
 
       - name: created_at

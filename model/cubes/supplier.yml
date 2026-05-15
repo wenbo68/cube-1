@@ -1,0 +1,30 @@
+cubes:
+  - name: supplier
+    sql_table: monolis_staging.`Supplier`
+    data_source: default
+
+    dimensions:
+      - name: id
+        sql: "{CUBE}.`id`"
+        type: number
+        primary_key: true
+
+      - name: name
+        sql: "{CUBE}.`name`"
+        type: string
+
+      - name: abbreviation
+        sql: "{CUBE}.`abbreviation`"
+        type: string
+
+      - name: contact_person
+        sql: "{CUBE}.`contactPerson`"
+        type: string
+
+      - name: email
+        sql: "{CUBE}.`email`"
+        type: string
+
+    measures:
+      - name: count
+        type: count

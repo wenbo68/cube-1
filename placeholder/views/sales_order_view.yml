@@ -38,16 +38,22 @@ views:
             alias: trim_balance_qty
             description: "The deficit or surplus of trim/accessory material. A negative value indicates missing/insufficient trim that must be procured. A positive value or zero indicates sufficient materials."
 
+      - join_path: sales_order.fabric_consumption_balance.bom_fabric
+        includes:
+          - name: fabric_detail
+            description: "The detailed name or description of the fabric material required for the garment."
+          - name: supplier_name
+            alias: fabric_supplier_name
+            description: "The name of the vendor/supplier providing the fabric material."
+
       - join_path: sales_order.trim_consumption_balance.bom_accessory
         includes:
           - name: acc_detail
             alias: trim_detail
             description: "The detailed name or description of the trim/accessory material required for the garment."
-
-      - join_path: sales_order.fabric_consumption_balance.bom_fabric
-        includes:
-          - name: fabric_detail
-            description: "The detailed name or description of the fabric material required for the garment."
+          - name: supplier_name
+            alias: trim_supplier_name
+            description: "The name of the vendor/supplier providing the trim/accessory material."
 
       - join_path: sales_order.brand
         prefix: true
